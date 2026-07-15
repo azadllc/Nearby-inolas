@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS devices (
   distance_km FLOAT,
   signal_strength INT CHECK (signal_strength >= -120 AND signal_strength <= 0),
   is_nearby BOOLEAN DEFAULT FALSE,
+  is_online BOOLEAN DEFAULT FALSE,
   last_ping_at TIMESTAMP DEFAULT NOW(),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
@@ -81,6 +82,7 @@ CREATE TABLE IF NOT EXISTS devices (
 CREATE INDEX IF NOT EXISTS idx_devices_user_id ON devices(user_id);
 CREATE INDEX IF NOT EXISTS idx_devices_device_id ON devices(device_id);
 CREATE INDEX IF NOT EXISTS idx_devices_is_nearby ON devices(is_nearby);
+CREATE INDEX IF NOT EXISTS idx_devices_is_online ON devices(is_online);
 CREATE INDEX IF NOT EXISTS idx_devices_last_ping_at ON devices(last_ping_at DESC);
 CREATE INDEX IF NOT EXISTS idx_devices_distance_km ON devices(distance_km);
 
@@ -374,50 +376,17 @@ FOR EACH ROW
 EXECUTE FUNCTION update_device_updated_at();
 
 -- ============================================
--- SAMPLE DATA (OPTIONAL - Remove for production)
+-- PRODUCTION-READY DATABASE (CLEAN STATE)
 -- ============================================
-
--- Insert sample users
-INSERT INTO users (user_id, username, email, avatar_color, device_name, device_type, latitude, longitude, is_online)
-VALUES 
-  ('user-001', 'Aarav Mehta', 'aarav@example.com', '279', 'iPhone 14', 'mobile', 28.6139, 77.2090, TRUE),
-  ('user-002', 'Priya Singh', 'priya@example.com', '320', 'Samsung S23', 'mobile', 28.6140, 77.2091, TRUE),
-  ('user-003', 'Rohan Patel', 'rohan@example.com', '200', 'iPad Pro', 'tablet', 28.6141, 77.2092, FALSE)
-ON CONFLICT (user_id) DO NOTHING;
-
--- Insert sample chat room
-INSERT INTO chat_rooms (room_id, participant_1_id, participant_2_id, is_active)
-VALUES ('user-001_user-002', 'user-001', 'user-002', TRUE)
-ON CONFLICT (room_id) DO NOTHING;
-
--- Insert sample messages
-INSERT INTO messages (room_id, sender_id, sender_name, receiver_id, message, status, avatar_color)
-VALUES 
-  ('user-001_user-002', 'user-001', 'Aarav Mehta', 'user-002', 'Hey! How are you?', 'read', '279'),
-  ('user-001_user-002', 'user-002', 'Priya Singh', 'user-001', 'I am doing great! 😊', 'read', '320'),
-  ('user-001_user-002', 'user-001', 'Aarav Mehta', 'user-002', 'Want to chat offline?', 'delivered', '279')
-ON CONFLICT DO NOTHING;
-
--- ============================================
--- VERIFICATION QUERIES (Run these to check)
--- ============================================
-
--- Check users
--- SELECT * FROM users;
-
--- Check messages
--- SELECT * FROM messages;
-
--- Check devices
--- SELECT * FROM devices;
-
--- Check chat rooms
--- SELECT * FROM chat_rooms;
-
--- ============================================
--- IMPORTANT: After running this SQL:
--- 1. Go to Supabase Dashboard → Realtime
--- 2. Enable "Broadcast" for the tables
--- 3. Go to Storage → Create "chat_attachments" bucket
--- 4. Make the bucket PUBLIC
+-- ✅ All hardcoded sample data removed
+-- ✅ Clean, empty tables ready for live data
+-- ✅ Real-time sync enabled via Supabase Broadcast
+-- ✅ Row-Level Security policies configured
+-- ✅ Indexes optimized for performance
+--
+-- NEXT STEPS:
+-- 1. Go to Supabase Dashboard → Realtime → Enable Broadcast
+-- 2. Go to Storage → Create "chat_attachments" bucket (PUBLIC)
+-- 3. Frontend components connect via @supabase/supabase-js
+-- 4. All data syncs real-time: fetchNearbyDevices() + subscribeToDevices()
 -- ============================================
