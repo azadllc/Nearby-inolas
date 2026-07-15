@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+
+# Production
+dist/
+
+# Misc
+.DS_Store
+*.pem
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel/
+
+# Turborepo
+.turbo/
+
+# Optional npm cache directory
+.npm
+
+# Optional PNPM cache directory
+.pnpm-store/
+
+# Optional eslint cache
+.eslintcache
+
+# Cache
+.cache/
+
+# Zip files
+*.zip
+
+# Ignore inolas-nearby-ui.zip (source archive)
+inolas-nearby-ui.zip
